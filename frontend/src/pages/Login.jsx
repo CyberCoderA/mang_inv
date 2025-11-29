@@ -54,7 +54,7 @@ const Login = () => {
                 <h1 className="text-sm font-bold text-gray-900 lg:text-4xl">Inventory Management System</h1>
             </div>
 
-            <div className="w-full h-[50%] flex flex-col items-center gap-5 p-4">
+            <div className="w-full h-[50%] flex flex-col items-center gap-5 p-4 overscroll-y-auto">
                 <h1 className="text-2xl font-bold text-gray-900 lg:text-4xl">LOGIN</h1>
                 <div className="h-full w-full flex flex-col gap-10">
                     <div className="flex flex-col gap-2">

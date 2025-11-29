@@ -9,22 +9,28 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [fullname, setFullname] = useState("");
     const [userRoles, setUserRoles] = useState([]);
+    const [isLoadingRoles, setIsLoadingRoles] = useState(true);
+    const [isSigningUp, setIsSigningUp] = useState(false);
 
     // fetch roles once on mount
     useEffect(() => {
         let cancelled = false;
+        setIsLoadingRoles(true);
         axios.get('/api/user_roles/getAllRoles')
             .then(response => {
                 const data = response.data || {};
                 if (data.error) {
                     alert(`Error: ${data.error}`);
+                    setIsLoadingRoles(false);
                     return;
                 }
                 if (!cancelled) setUserRoles(data.roles || []);
+                setIsLoadingRoles(false);
             })
             .catch(error => {
                 console.error("There was an error retrieving user roles!", error);
                 alert("Failed to retrieve user roles.");
+                setIsLoadingRoles(false);
             });
 
         return () => { cancelled = true };
@@ -39,6 +45,7 @@ const SignUp = () => {
 
     // handle sign up
     function handleSignUp() {
+        setIsSigningUp(true);
         axios.post('/api/users/signup', {
             user_type: userType,
             username: username,
@@ -49,6 +56,7 @@ const SignUp = () => {
             // If backend returns an explicit error
             if (data.error) {
                 alert(`Error: ${data.error}`);
+                setIsSigningUp(false);
                 return;
             }
 
@@ -61,9 +69,11 @@ const SignUp = () => {
                 // Fallback: show raw response
                 alert(JSON.stringify(data));
             }
+            setIsSigningUp(false);
         }).catch(error => {
             console.error("There was an error signing up!", error);
             alert("Sign up failed.");
+            setIsSigningUp(false);
         });
     }
 
@@ -76,14 +86,14 @@ const SignUp = () => {
                     <h1 className="text-sm font-bold text-gray-900 lg:text-4xl">Inventory Management System</h1>
                 </div>
 
-                <div className="w-full h-[72%] flex flex-col items-center gap-2 p-4">
+                <div className="w-full h-[73%] flex flex-col items-center gap-2 p-4">
                     <h1 className="text-2xl font-bold text-gray-900 lg:text-4xl">SIGN UP</h1>
                     <div className="h-full w-full flex flex-col gap-5 overflow-y-auto">
                         <div className="flex flex-col gap-2">
                             <label htmlFor="user-roles" className="text-3xl font-bold">User Type: </label>
-                            <select className="h-12 p-2 border-2 border-black rounded-xl" name="user-roles" id="user-roles" value={userType} onChange={(e) => setUserType(e.target.value)}>
-                                <optgroup>
-                                    {renderUserRoles()}
+                            <select className="h-12 p-2 border-2 border-black rounded-xl" name="user-roles" id="user-roles" value={userType} onChange={(e) => setUserType(e.target.value)} disabled={isLoadingRoles}>
+                                <optgroup defaultValue={1}>
+                                    {isLoadingRoles ? <option>Loading roles...</option> : renderUserRoles()}
                                 </optgroup>
                             </select>
                         </div>
@@ -103,7 +113,7 @@ const SignUp = () => {
                             <input id="password-field" type="password" className="h-12 w-full border-2 p-2 text-xl rounded-lg" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         
-                        <button className="w-full h-[20%] p-3 rounded-xl bg-blue-900 text-white text-2xl hover:cursor-pointer hover:text-3xl hover:font-bold" onClick={() => handleSignUp()}>SIGN UP</button>
+                        <button className="w-full h-[25%] p-3 rounded-xl bg-blue-900 text-white text-2xl hover:cursor-pointer hover:text-3xl hover:font-bold" onClick={() => handleSignUp()}>SIGN UP</button>
                     </div>
                 </div>
 
