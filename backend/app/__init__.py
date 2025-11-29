@@ -11,7 +11,7 @@ def create_app():
     app.config.from_object(DevelopmentConfig)
 
     # Enable CORS for API routes from the frontend origin used in development.
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+    CORS(app)
     dbq.init_app(app)
 
     # import blueprints here to avoid circular imports
