@@ -2,7 +2,6 @@ from app import dbq
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 from app.models.user_roles_model import UserRoles
-
 class Users(dbq.Model):
     user_id: Mapped[str] = mapped_column(String(255), primary_key=True, nullable=False, unique=True)
     user_role: Mapped[str] = mapped_column(Integer, nullable=False)
