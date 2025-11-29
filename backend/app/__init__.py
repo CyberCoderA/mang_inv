@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from ..config import DevelopmentConfig
+from config import DevelopmentConfig
 
 # initialize the SQLAlchemy object at module level
 dbq = SQLAlchemy()
